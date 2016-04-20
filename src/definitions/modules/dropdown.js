@@ -917,11 +917,16 @@ $.fn.dropdown = function(parameters) {
             }
           },
           remove: {
-            click: function() {
+            click: function(event) {
+              event.stopPropagation();
               var
                 $label = $(this).parent()
               ;
-              if( $label.hasClass(className.active) ) {
+              if (settings.allowDuplicates) {
+                settings.onLabelRemove.call($label);
+                $label.remove();
+              }
+              else if( $label.hasClass(className.active) ) {
                 // remove all selected labels
                 module.remove.activeLabels();
               }
