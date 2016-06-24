@@ -696,7 +696,17 @@
             isDateInRange: function (date, mode, minDate, maxDate) {
               if (!minDate && !maxDate) {
                 var startDate = module.get.startDate();
-                minDate = startDate && settings.minDate ? Math.max(startDate, settings.minDate) : startDate || settings.minDate;
+                if (startDate && settings.minDate) {
+                  if (startDate > settings.minDate) {
+                    minDate = startDate;
+                  }
+                  else {
+                    minDate = settings.minDate;
+                  }
+                }
+                else {
+                  minDate = startDate || settings.minDate;
+                }
                 maxDate = settings.maxDate;
               }
               return !(!date ||
@@ -706,7 +716,17 @@
             dateInRange: function (date, minDate, maxDate) {
               if (!minDate && !maxDate) {
                 var startDate = module.get.startDate();
-                minDate = startDate && settings.minDate ? Math.max(startDate, settings.minDate) : startDate || settings.minDate;
+                if (startDate && settings.minDate) {
+                  if (startDate > settings.minDate) {
+                    minDate = startDate;
+                  }
+                  else {
+                    minDate = settings.minDate;
+                  }
+                }
+                else {
+                  minDate = startDate || settings.minDate;
+                }
                 maxDate = settings.maxDate;
               }
               var isTimeOnly = settings.type === 'time';
