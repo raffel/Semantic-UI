@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.1.7 - Dropdown
+ * # Semantic UI 2.1.8 - Dropdown
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -917,11 +917,16 @@ $.fn.dropdown = function(parameters) {
             }
           },
           remove: {
-            click: function() {
+            click: function(event) {
+              event.stopPropagation();
               var
                 $label = $(this).parent()
               ;
-              if( $label.hasClass(className.active) ) {
+              if (settings.allowDuplicates) {
+                settings.onLabelRemove.call($label);
+                $label.remove();
+              }
+              else if( $label.hasClass(className.active) ) {
                 // remove all selected labels
                 module.remove.activeLabels();
               }
@@ -2262,14 +2267,18 @@ $.fn.dropdown = function(parameters) {
                     if(settings.useLabels) {
                       module.add.value(selectedValue, selectedText, $selected);
                       module.add.label(selectedValue, selectedText, shouldAnimate);
-                      module.set.activeItem($selected);
+                      if (!settings.allowDuplicates) {
+                        module.set.activeItem($selected);
+                      }
                       module.filterActive();
                       module.select.nextAvailable($selectedItem);
                     }
                     else {
                       module.add.value(selectedValue, selectedText, $selected);
                       module.set.text(module.add.variables(message.count));
-                      module.set.activeItem($selected);
+                      if (!settings.allowDuplicates) {
+                        module.set.activeItem($selected);
+                      }
                     }
                   }
                   else if(!isFiltered) {
@@ -2308,7 +2317,7 @@ $.fn.dropdown = function(parameters) {
             ;
             $label = settings.onLabelCreate.call($label, value, text);
 
-            if(module.has.label(value)) {
+            if(!settings.allowDuplicates && module.has.label(value)) {
               module.debug('Label already exists, skipping', value);
               return;
             }
@@ -3243,6 +3252,7 @@ $.fn.dropdown.settings = {
 
   maxSelections          : false,      // When set to a number limits the number of selections to this count
   useLabels              : true,       // whether multiple select should filter currently active selections from choices
+  allowDuplicates        : false,      // whether multiple select should allow duplicates
   delimiter              : ',',        // when multiselect uses normal <input> the values will be delimited with this character
 
   showOnFocus            : true,       // show menu on focus
