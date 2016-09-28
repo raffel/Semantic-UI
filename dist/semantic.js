@@ -3730,6 +3730,19 @@ $.extend( $.easing, {
             }
           }
 
+          //day
+          for (i = 0; i < numbers.length; i++) {
+            j = parseInt(numbers[i]);
+            if (isNaN(j)) {
+              continue;
+            }
+            if (1 <= j && j <= 31) {
+              day = j;
+              numbers.splice(i, 1);
+              break;
+            }
+          }
+
           //numeric month
           if (month < 0) {
             for (i = 0; i < numbers.length; i++) {
@@ -3743,19 +3756,6 @@ $.extend( $.easing, {
                 numbers.splice(k, 1);
                 break;
               }
-            }
-          }
-
-          //day
-          for (i = 0; i < numbers.length; i++) {
-            j = parseInt(numbers[i]);
-            if (isNaN(j)) {
-              continue;
-            }
-            if (1 <= j && j <= 31) {
-              day = j;
-              numbers.splice(i, 1);
-              break;
             }
           }
 
