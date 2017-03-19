@@ -3150,9 +3150,6 @@ $.extend( $.easing, {
               date = module.helper.dateInRange(date);
 
               var text = formatter.datetime(date, settings);
-              if (fireChange && settings.onChange.call(element, date, text) === false) {
-                return false;
-              }
 
               var endDate = module.get.endDate();
               if (!!endDate && !!date && date > endDate) {
@@ -3164,6 +3161,9 @@ $.extend( $.easing, {
 
               if (updateInput && $input.length) {
                 $input.val(text);
+              }
+              if (fireChange) {
+                settings.onChange.call(element, date, text);
               }
             },
             startDate: function (date, refreshCalendar) {
