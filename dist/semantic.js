@@ -2737,6 +2737,9 @@ $.extend( $.easing, {
                 };
               }
               var onShow = function () {
+                var val = $input.val();
+                var date = parser.date(val, settings);
+                module.set.date(date, settings.formatInput, false);
                 //reset the focus date onShow
                 module.set.focusDate(module.get.date());
                 module.set.mode(settings.startMode);
@@ -3172,6 +3175,12 @@ $.extend( $.easing, {
               if (startModule) {
                 startModule.set.date(date);
               }
+              var endModule = module.get.calendarModule(settings.endCalendar);
+              if (endModule) {
+                var m = moment(date);
+                m.endOf('month');
+                endModule.set.date(m.toDate());
+              }
               module.set.dataKeyValue(metadata.startDate, date, refreshCalendar);
             },
             endDate: function (date, refreshCalendar) {
@@ -3225,6 +3234,9 @@ $.extend( $.easing, {
                 //if this is a range calendar, show the end date calendar popup and focus the input
                 var endModule = module.get.calendarModule(settings.endCalendar);
                 if (endModule) {
+                  var m = moment(date);
+                  m.endOf('month');
+                  endModule.set.date(m.toDate());
                   endModule.popup('show');
                   endModule.focus();
                 }
